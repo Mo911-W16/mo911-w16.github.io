@@ -194,9 +194,9 @@ function printYear(){
   const rows = MONTHS.map(m => {
     const es = byM(m).slice().sort((a,b) => (parseInt(a.d?.split("/")[1])||99) - (parseInt(b.d?.split("/")[1])||99));
     if(!es.length) return "";
-    return es.map((x,i) => `<tr>${i===0 ? `<td class="yt-mon" rowspan="${es.length}">${m}月</td>` : ""}<td class="yt-when">${esc(x.d||"")}</td><td class="yt-card"><span class="tag" style="background:${cat(x.card.cat).color}">${esc(x.card.name)}</span></td><td>${x.dl ? '<span class="dlmark">◆締切 </span>' : ""}${esc(x.text)}</td></tr>`).join("");
+    return `<tr class="yt-monrow"><td colspan="3">${m}月</td></tr>` + es.map(x => `<tr><td class="yt-when">${esc(x.d||"")}</td><td class="yt-card"><span class="tag" style="background:${cat(x.card.cat).color}">${esc(x.card.name)}</span></td><td>${x.dl ? '<span class="dlmark">◆締切 </span>' : ""}${esc(x.text)}</td></tr>`).join("");
   }).join("");
-  pa.innerHTML = `<div class="print-help">🖨 印刷用レイアウトを表示しています。<button type="button" onclick="window.print()">🖨 印刷する</button><button type="button" onclick="exitPrintMode()">← ダッシュボードに戻る</button></div><div class="year-sheet"><h1>一年間のやること一覧 ― 国際教育推進部</h1><p class="yt-sub">4月はじまり。全${EV.length}件（うち締切 ${EV.filter(x=>x.dl).length}件）。詳しい手順は各業務のカードを見てください。</p><table class="yt"><thead><tr><th style="width:52px">月</th><th style="width:56px">日付</th><th style="width:170px">業務</th><th>やること</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  pa.innerHTML = `<div class="print-help">🖨 印刷用レイアウトを表示しています。<button type="button" onclick="window.print()">🖨 印刷する</button><button type="button" onclick="exitPrintMode()">← ダッシュボードに戻る</button></div><div class="year-sheet"><h1>一年間のやること一覧 ― 国際教育推進部</h1><p class="yt-sub">4月はじまり。全${EV.length}件（うち締切 ${EV.filter(x=>x.dl).length}件）。詳しい手順は各業務のカードを見てください。</p><table class="yt"><thead><tr><th style="width:56px">日付</th><th style="width:170px">業務</th><th>やること</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   document.body.classList.add("printing-card");
   window.scrollTo(0, 0);
 }

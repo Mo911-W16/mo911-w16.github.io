@@ -795,6 +795,8 @@ table.yt{width:100%;border-collapse:collapse;font-size:11.5px;line-height:1.5}
 table.yt th,table.yt td{border:1px solid #bbb;padding:4px 7px;vertical-align:top;text-align:left}
 table.yt thead th{background:#eef1f5}
 table.yt td.yt-mon{font-weight:700;text-align:center;background:#f6f8fa;font-size:12.5px;white-space:nowrap}
+table.yt tr.yt-monrow td{background:#e8edf3;font-weight:700;font-size:12.5px}
+@media print{table.yt tr.yt-monrow{break-after:avoid}}
 table.yt td.yt-when{white-space:nowrap}
 table.yt td.yt-card{white-space:normal}
 @media print{table.yt thead{display:table-header-group} table.yt{font-size:10.5px}}
