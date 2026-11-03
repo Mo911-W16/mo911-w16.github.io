@@ -37,7 +37,7 @@ document.addEventListener("click", e => {
 // タブ
 const VIEWS = DATA.key === "kokusai"
   ? [["cal","📅 年間カレンダー"],["cards","🗂 業務カード"],["src","📁 資料保管場所"],["people","🤝 関係者"],["survey","📊 アンケート結果"],["story","📖 部の物語"],["busy","🔥 繁忙期"],["todo","❓ 要確認リスト"],["handover","📗 引き継ぎ"]]
-  : [["top","🏠 トップ・年間カレンダー"],["cards","🗂 業務カード"],["src","📁 資料保管場所"],["people","🤝 関係者"],["story","🧭 英語の道のり"],["busy","🔥 繁忙期"],["todo","❓ 要確認リスト"]];
+  : [["cal","📅 年間カレンダー"],["cards","🗂 業務カード"],["src","📁 資料保管場所"],["people","🤝 関係者"],["story","🧭 英語の道のり"],["busy","🔥 繁忙期"],["todo","❓ 要確認リスト"],["handover","📗 引き継ぎ"]];
 $("#tabs").innerHTML = VIEWS.map(([k,l]) => `<button data-v="${k}">${l}</button>`).join("");
 let storySub = "story";
 function showStory(sub){
@@ -48,7 +48,7 @@ function showStory(sub){
   window.scrollTo({top: 0});
 }
 function show(v){
-  if(v === "top" && DATA.key === "kokusai") v = "cal";
+  if(v === "top") v = "cal";
   if(v === "story" || v === "horizon"){ showStory(v === "horizon" ? "horizon" : storySub); return; }
   document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
   document.querySelectorAll("section.view").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
@@ -76,8 +76,8 @@ function renderTop(){
     event: "修学旅行や保護者会、取材への対応など、学校行事と対外対応です。",
     admin: "予算要求や部の計画、備品の管理など、部を回すための運営の仕事です。"
   };
-  const step1 = isK ? "show('cal');setTimeout(()=>document.getElementById('topcal').scrollIntoView({behavior:'smooth'}),60)" : "document.getElementById('topcal').scrollIntoView({behavior:'smooth'})";
-  const step1Text = isK ? "「年間カレンダー」のページで、この先2か月の予定と締切を見ます" : "下の年間カレンダーで、この先2か月の予定と締切を見ます";
+  const step1 = "show('cal');setTimeout(()=>document.getElementById('topcal').scrollIntoView({behavior:'smooth'}),60)";
+  const step1Text = "「年間カレンダー」のページで、この先2か月の予定と締切を見ます";
   const topHtml = `
     <details class="p-intro">
     <summary>はじめに ― このダッシュボードについて／後任はまずここから</summary>
@@ -146,14 +146,10 @@ function renderTop(){
     <h2 id="mtitle"></h2>
     <div class="panel"><ul class="events" id="mlist"></ul></div>
     </div>`;
-  if(isK){
-    const cut = topHtml.indexOf('<div id="topcal">');
-    $("#v-handover").innerHTML = topHtml.slice(0, cut);
-    $("#v-cal").innerHTML = topHtml.slice(cut);
-  } else {
-    $("#v-top").innerHTML = topHtml;
-  }
-  (isK ? $("#v-cal .ribbon") : $("#v-top .ribbon")).addEventListener("click", e => { const d = e.target.closest(".mon"); if(!d) return; selM = +d.dataset.m; renderTop(); $("#mtitle").scrollIntoView({behavior:"smooth", block:"start"}); });
+  const cut = topHtml.indexOf('<div id="topcal">');
+  $("#v-handover").innerHTML = topHtml.slice(0, cut);
+  $("#v-cal").innerHTML = topHtml.slice(cut);
+  $("#v-cal .ribbon").addEventListener("click", e => { const d = e.target.closest(".mon"); if(!d) return; selM = +d.dataset.m; renderTop(); $("#mtitle").scrollIntoView({behavior:"smooth", block:"start"}); });
   const es = byM(selM).sort((a,b) => (parseInt(a.d?.split("/")[1])||99) - (parseInt(b.d?.split("/")[1])||99));
   $("#mtitle").textContent = `${selM}月にやること${selM===curM?"（今月）":""}`;
   $("#mlist").innerHTML = es.length ? es.map(x => `<li><span class="when">${esc(x.d||selM+"月")}</span>
@@ -451,8 +447,8 @@ $("#theme").addEventListener("click", () => {
 });
 
 renderTop(); renderCards(); renderPeople(); renderSurvey(); renderBusy(); renderTodo(); renderSrc(); renderStory(); renderHorizon();
-let first = DATA.key === "kokusai" ? "cal" : "top"; try{ first = localStorage.getItem("hk-view-" + DATA.key) || first; }catch(e){}
-if(DATA.key === "kokusai" && first === "top") first = "cal";
+let first = "cal"; try{ first = localStorage.getItem("hk-view-" + DATA.key) || first; }catch(e){}
+if(first === "top") first = "cal";
 show(first);
 // #card=ID で業務カードを直接開く（リンクの共有用）
 if(location.hash.startsWith("#card=")){ show("cards"); openCard(decodeURIComponent(location.hash.slice(6))); }
