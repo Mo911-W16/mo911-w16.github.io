@@ -182,6 +182,7 @@ function openCard(id){
 }
 function printCard(id){
   const c = DATA.cards.find(x => x.id === id); if(!c) return;
+  const dlg = $("#dlg"); if(dlg && dlg.open) dlg.close();
   let pa = $("#print-area");
   if(!pa){ pa = document.createElement("div"); pa.id = "print-area"; document.body.appendChild(pa); }
   pa.innerHTML = `<div class="print-help">🖨 印刷用レイアウトを表示しています。<button type="button" onclick="window.print()">🖨 印刷する</button><button type="button" onclick="exitPrintMode()">← ダッシュボードに戻る</button></div>` + cardDetailHtml(c);
